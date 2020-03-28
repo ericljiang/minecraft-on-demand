@@ -9,7 +9,11 @@ class StartServerButton extends React.Component {
   }
 
   render() {
-    return <button onClick={this.startServer}>Start server</button>;
+    const onClick = () => {
+      this.startServer();
+      this.props.onClick();
+    }
+    return <button onClick={onClick}>Start server</button>;
   }
 }
 

@@ -2,11 +2,13 @@ import React from 'react';
 
 export default class PlayerList extends React.Component {
   render() {
+    const countOnline = this.props.players.online
+    const sample = this.props.players.sample || [];
     return (
       <div>
-        <p>{this.props.players.online} player(s) online</p>
+        <p>{countOnline} player(s) online</p>
         <ul>
-        {this.props.players.sample.sort((a, b) => a.name.localeCompare(b.name)).map(p =>
+        {sample.sort((a, b) => a.name.localeCompare(b.name)).map(p =>
           <li key={p.id}>{p.name}</li>
         )}
         </ul>

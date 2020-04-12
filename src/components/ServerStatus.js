@@ -2,6 +2,7 @@ import React from 'react';
 import StartServerButton from './StartServerButton.js'
 import PlayerList from './PlayerList.js';
 import ServerStatusMessage from './ServerStatusMessage.js';
+import {getInstanceStatus, getServerStatus} from '../api/server'
 
 class ServerStatus extends React.Component {
   constructor() {
@@ -13,9 +14,7 @@ class ServerStatus extends React.Component {
       serverIntervalId: null,
       recentlyStarted: false
     };
-    this.getInstanceStatus = this.getInstanceStatus.bind(this);
     this.updateInstanceStatus = this.updateInstanceStatus.bind(this);
-    this.getServerStatus = this.getServerStatus.bind(this);
     this.updateServerStatus = this.updateServerStatus.bind(this);
     this.setRecentlyStarted = this.setRecentlyStarted.bind(this);
   }
@@ -74,19 +73,13 @@ class ServerStatus extends React.Component {
   }
 
   updateServerStatus() {
-    this.getServerStatus((response) => {
+    getServerStatus((response) => {
       if (response.ping != null) {
         this.setState({server: response});
       } else {
         this.setState({server: null});
       }
     });
-  }
-
-  getServerStatus(callback) {
-    fetch("https://0pthbtylvg.execute-api.us-east-1.amazonaws.com/minecraftServerStatus/mc.ericjiang.me")
-      .then((response) => response.json())
-      .then(callback);
   }
 
   updateInstanceInterval(period) {
@@ -96,16 +89,10 @@ class ServerStatus extends React.Component {
   }
 
   updateInstanceStatus() {
-    this.getInstanceStatus((data) => {
+    getInstanceStatus((data) => {
       const instance = data.Reservations[0].Instances[0];
       this.setState({instance: instance});
     });
-  }
-
-  getInstanceStatus(callback) {
-    fetch("https://0pthbtylvg.execute-api.us-east-1.amazonaws.com/minecraftInstanceStatus")
-      .then((response) => response.json())
-      .then(callback);
   }
 
   setRecentlyStarted() {

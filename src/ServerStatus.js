@@ -1,5 +1,7 @@
 import React from 'react';
 import StartServerButton from './StartServerButton.js'
+import PlayerList from './PlayerList.js';
+import ServerStatusMessage from './ServerStatusMessage.js';
 
 class ServerStatus extends React.Component {
   constructor() {
@@ -16,7 +18,6 @@ class ServerStatus extends React.Component {
     this.getServerStatus = this.getServerStatus.bind(this);
     this.updateServerStatus = this.updateServerStatus.bind(this);
     this.setRecentlyStarted = this.setRecentlyStarted.bind(this);
-    this.generateMessage = this.generateMessage.bind(this);
   }
 
   componentDidMount() {
@@ -47,6 +48,7 @@ class ServerStatus extends React.Component {
         }
       } else {
         this.updateServerInterval(null);
+        this.setState({server: null})
       }
     } else {
       // once the server has started, don't check its status as often
@@ -110,43 +112,18 @@ class ServerStatus extends React.Component {
     this.setState({recentlyStarted: true});
   }
 
-  generateMessage() {
-    if (this.state.instance) {
-      switch (this.state.instance.State.Name) {
-        case "stopped":
-          if (this.state.recentlyStarted) {
-            return "Starting instance...";
-          } else {
-            return "Server is stopped.";
-          }
-        case "pending":
-          return "Instance is starting...";
-        case "running":
-          if (!this.state.server) {
-            return `Instance is running at ${this.state.instance.PublicIpAddress}. Waiting for server to start...`;
-          } else if (!this.state.server.players) {
-            return "Loading world...";
-          } else {
-            return "Server is running at mc.ericjiang.me.";
-          }
-        case "stopping":
-          return "Instance is stopping...";
-        default:
-          return "Unknown status."
-      }
-    } else {
-      return "Loading...";
-    }
-  }
-
   render() {
     const showStartServerButton = this.state.instance && this.state.instance.State.Name === "stopped";
     const showPlayers = this.state.server && this.state.server.players;
     return (
       <>
         {showStartServerButton && <StartServerButton onClick={this.setRecentlyStarted} />}
-        <h1>{this.generateMessage()}</h1>
-        {showPlayers && <p>{this.state.server.players.online} players online</p>}
+        <ServerStatusMessage
+          instance={this.state.instance}
+          server={this.state.server}
+          recentlyStarted={this.state.recentlyStarted}
+        />
+        {showPlayers && <PlayerList players={this.state.server.players} />}
       </>
     );
   }

@@ -1,4 +1,5 @@
 import React from 'react';
+import './ServerStatus.css'
 import StartServerButton from './StartServerButton.js'
 import PlayerList from './PlayerList.js';
 import ServerStatusMessage from './ServerStatusMessage.js';
@@ -103,7 +104,7 @@ class ServerStatus extends React.Component {
     const showStartServerButton = this.state.instance && this.state.instance.State.Name === "stopped";
     const showPlayers = this.state.server && this.state.server.players;
     return (
-      <>
+      <div className="ServerStatus">
         {showStartServerButton && <StartServerButton onClick={this.setRecentlyStarted} />}
         <ServerStatusMessage
           instance={this.state.instance}
@@ -111,7 +112,7 @@ class ServerStatus extends React.Component {
           recentlyStarted={this.state.recentlyStarted}
         />
         {showPlayers && <PlayerList players={this.state.server.players} />}
-      </>
+      </div>
     );
   }
 }

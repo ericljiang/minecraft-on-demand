@@ -1,5 +1,25 @@
 .PlayerList {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+.Player {
+  width: 64px;
+  height: 64px;
+  line-height: 64px;
+  margin: 8px;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+}
+
+img {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
 }
